@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.rseu.final_qualifying_work.screens.fragments.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_groupsFragment"
+            app:destination="@id/groupsFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_reportFragment"
+            app:destination="@id/reportFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_lessonsFragment"
+            app:destination="@id/lessonsFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_disciplineFragment"
+            app:destination="@id/disciplineFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/groupsFragment"
+        android:name="com.rseu.final_qualifying_work.screens.fragments.GroupsFragment"
+        android:label="fragment_groups"
+        tools:layout="@layout/fragment_groups" >
+        <action
+            android:id="@+id/action_groupsFragment_to_groupDetailFragment"
+            app:destination="@id/groupDetailFragment" />
+        <action
+            android:id="@+id/action_groupsFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/groupDetailFragment"
+        android:name="com.rseu.final_qualifying_work.screens.fragments.GroupDetailFragment"
+        android:label="fragment_group_detail"
+        tools:layout="@layout/fragment_group_detail">
+        <action
+            android:id="@+id/action_groupDetailFragment_to_groupsFragment"
+            app:destination="@id/groupsFragment" />
+        <argument
+            android:name="groupJson"
+            app:argType="string"
+            android:defaultValue="default" />
+    </fragment>
+    <fragment
+        android:id="@+id/lessonsFragment"
+        android:name="com.rseu.final_qualifying_work.screens.fragments.LessonsFragment"
+        android:label="fragment_discipline"
+        tools:layout="@layout/fragment_lessons" >
+        <action
+            android:id="@+id/action_lessonsFragment_to_detailLessonsFragment"
+            app:destination="@id/detailLessonsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailLessonsFragment"
+        android:name="com.rseu.final_qualifying_work.screens.fragments.DetailLessonsFragment"
+        android:label="fragment_detail_lessons"
+        tools:layout="@layout/fragment_detail_lessons" >
+        <action
+            android:id="@+id/action_detailLessonsFragment_to_lessonsFragment"
+            app:destination="@id/lessonsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/disciplineFragment"
+        android:name="com.rseu.final_qualifying_work.screens.fragments.DisciplineFragment"
+        android:label="fragment_discipline"
+        tools:layout="@layout/fragment_discipline" >
+        <action
+            android:id="@+id/action_disciplineFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reportFragment"
+        android:name="com.rseu.final_qualifying_work.screens.fragments.ReportFragment"
+        android:label="fragment_report"
+        tools:layout="@layout/fragment_report" >
+        <action
+            android:id="@+id/action_reportFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+</navigation>

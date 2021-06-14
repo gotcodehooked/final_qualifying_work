@@ -1,0 +1,2 @@
+rootProject.name = "final_qualifying_work"
+include ':app'

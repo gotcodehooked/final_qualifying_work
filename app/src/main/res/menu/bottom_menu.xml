@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/mainFragment"
+        android:icon="@drawable/ic_baseline_home_24"
+ />
+    <item
+        android:id="@+id/groupsFragment"
+        android:icon="@drawable/ic_sharp_group_24"
+       />
+    <item
+        android:id="@+id/lessonsFragment"
+        android:icon="@drawable/ic_sharp_school_24"
+        />
+    <item
+        android:id="@+id/disciplineFragment"
+        android:icon="@drawable/ic_sharp_list_24"
+         />
+    <item
+        android:id="@+id/reportFragment"
+        android:icon="@drawable/ic_baseline_leaderboard_24"
+         />
+</menu>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    >
+
+    <item
+        android:id="@+id/discipline_bar_search"
+        android:icon="@drawable/ic_baseline_search_24"
+        android:title="Поиск"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always|collapseActionView" />
+
+    <item
+        android:id="@+id/discipline_bar_remove"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_more_vert_24"
+        android:menuCategory="container"
+        android:title="Удалить элементы"
+        android:visible="true" />
+
+</menu>
