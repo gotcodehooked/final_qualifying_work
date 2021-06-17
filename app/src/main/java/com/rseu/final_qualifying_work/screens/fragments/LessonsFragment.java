@@ -1,66 +1,150 @@
 package com.rseu.final_qualifying_work.screens.fragments;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ClipDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.rseu.final_qualifying_work.DBOperations;
+import com.rseu.final_qualifying_work.DBOperationsImpl;
 import com.rseu.final_qualifying_work.R;
+import com.rseu.final_qualifying_work.RealmService;
+import com.rseu.final_qualifying_work.model.Discipline;
+import com.rseu.final_qualifying_work.model.Group;
+import com.rseu.final_qualifying_work.model.Lesson;
+import com.rseu.final_qualifying_work.spinner.SearchableSpinner;
+import com.toptoche.searchablespinnerlibrary.SearchableListDialog;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link LessonsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import io.realm.OrderedRealmCollection;
+import io.realm.RealmResults;
+
+
 public class LessonsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
-    public LessonsFragment() {
-        // Required empty public constructor
-    }
+    private SearchableSpinner spinnerGroups;
+    private TextView spinnerDiscipline;
+    private TextView tvSpinnerGroups;
+    private Dialog dialog;
+    private List<String> groupNameList;
+    private List<String> disciplineNameList;
+    private FloatingActionButton floatingActionButton;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DisciplineFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static LessonsFragment newInstance(String param1, String param2) {
-        LessonsFragment fragment = new LessonsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private TextView tvSpinnerItem;
+    private RealmResults<Group> realmResultsGroup;
+    private RealmResults<Discipline> realmResultsDiscipline;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
+        View view = inflater.inflate(R.layout.fragment_lessons, container, false);
+
+        spinnerGroups = (SearchableSpinner) view.findViewById(R.id.sp_LessonGroup);
+
+        tvSpinnerGroups = view.findViewById(R.id.tv_LessonGroup);
+     //   spinnerDiscipline = view.findViewById(R.id.sp_LessonDiscipline);
+        floatingActionButton = view.findViewById(R.id.fb_lessonsFragment);
+        groupNameList = new ArrayList<>();
+
+        disciplineNameList = new ArrayList<>();
+
+        DBOperations<Group> groupDBOperations = new DBOperationsImpl<>();
+        DBOperations<Discipline> disciplineDBOperations = new DBOperationsImpl<>();
+
+        realmResultsDiscipline = disciplineDBOperations.readData(RealmService.getInstance(),Discipline.class);
+        realmResultsGroup = groupDBOperations.readData(RealmService.getInstance(),Group.class);
+
+
+        if(realmResultsGroup.size() > 0){
+            alertDialog(nameListGroup(groupNameList));
+        }
+
+//        if(realmResultsDiscipline.size() > 0){
+//            alertDialog(nameListDiscipline(disciplineNameList));
+//        }
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_lessonsFragment_to_detailLessonsFragment);
+            }
+        });
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_lessons, container, false);
+        return view;
+    }
+
+    private List<String> nameListGroup(List<String> list) {
+        for (Group g : realmResultsGroup){
+            list.add(g.getName());
+        }
+        return list;
+    }
+
+    private List<String> nameListDiscipline(List<String> list) {
+        for (Discipline d : realmResultsDiscipline){
+            if(d.getDisciplineName() != null && d.getDisciplineName().length() > 0){
+                list.add(d.getDisciplineName());
+            }
+
+        }
+        return list;
+    }
+
+    private void alertDialog(List<String> list){
+
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(requireContext(), R.layout.spinner_item,list);
+
+                spinnerGroups.setAdapter(arrayAdapter);
+                spinnerGroups.setTitle("Выберите группу");
+                spinnerGroups.setPositiveButton("Закрыть");
+
+                spinnerGroups.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+
+
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+
     }
 }
+

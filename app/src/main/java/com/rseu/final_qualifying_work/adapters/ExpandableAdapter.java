@@ -97,7 +97,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
         TextView groupCount = convertView.findViewById(R.id.tv_elvRowItemGroupCount);
         groupCount.setText(count);
-
+        super.notifyDataSetChanged();
         return convertView;
     }
 
@@ -132,7 +132,6 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
                 Toast.makeText(context,"REMOVE GROUP " + groupRemove.getName() + "   "+ groupPosition+"   "+ Integer.toString(childPosition), Toast.LENGTH_LONG).show();
                  Objects.requireNonNull(collection.get(groupList.get(groupPosition))).remove(groupRemove);
                  mOnItemClickListener.onItemClick(groupRemove);
-
             }
         });
 

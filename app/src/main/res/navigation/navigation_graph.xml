@@ -56,6 +56,9 @@
         <action
             android:id="@+id/action_lessonsFragment_to_detailLessonsFragment"
             app:destination="@id/detailLessonsFragment" />
+        <action
+            android:id="@+id/action_lessonsFragment_to_lessonChoiceGroupFragment"
+            app:destination="@id/lessonChoiceGroupFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailLessonsFragment"
@@ -83,5 +86,23 @@
         <action
             android:id="@+id/action_reportFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/lessonChoiceGroupFragment"
+        android:name="com.rseu.final_qualifying_work.LessonChoiceGroupFragment"
+        android:label="fragment_lesson_choice_group"
+        tools:layout="@layout/fragment_lesson_choice_group" >
+        <action
+            android:id="@+id/action_lessonChoiceGroupFragment_to_lessonChoiceDisciplineFragment"
+            app:destination="@id/lessonChoiceDisciplineFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/lessonChoiceDisciplineFragment"
+        android:name="com.rseu.final_qualifying_work.LessonChoiceDisciplineFragment"
+        android:label="fragment_lesson_choice_discipline"
+        tools:layout="@layout/fragment_lesson_choice_discipline" >
+        <action
+            android:id="@+id/action_lessonChoiceDisciplineFragment_to_detailLessonsFragment"
+            app:destination="@id/detailLessonsFragment" />
     </fragment>
 </navigation>

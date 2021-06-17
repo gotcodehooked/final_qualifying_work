@@ -29,7 +29,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/edittext_color"
-                android:inputType="textPersonName"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toTopOf="@+id/btn_alertGroupDetail"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -248,9 +248,9 @@ public class GroupDetailFragment extends Fragment {
 
                 if (edFirstName.getText() != null && edSecondName.getText() != null) {
 
-                    student.setFirstName(edFirstName.getText().toString());
+                    student.setFirstName(edFirstName.getText().toString().trim());
 
-                    student.setSecondName(edSecondName.getText().toString());
+                    student.setSecondName(edSecondName.getText().toString().trim());
 
                     studentList.add(student);
 

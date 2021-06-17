@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.rseu.final_qualifying_work"
-    >
-    <uses-permission android:name="android.permission.INTERNET"/>
+    package="com.rseu.final_qualifying_work">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <supports-screens
+        android:anyDensity="true"
+
+        android:largeScreens="true"
+
+        android:normalScreens="true"
+
+        android:resizeable="true"
+
+        android:smallScreens="true" />
 
     <application
         android:name=".RealmApp"
@@ -22,17 +32,17 @@
         </activity>
 
 
-        <activity android:name=".screens.MainActivity"
+        <activity
+            android:name=".screens.MainActivity"
             android:parentActivityName=".screens.MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            >
+
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
 
                 <action android:name="android.intent.action.MAIN" />
 
             </intent-filter>
         </activity>
-
 
         <meta-data
             android:name="preloaded_fonts"

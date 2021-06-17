@@ -39,8 +39,9 @@ public class GroupsFragment extends Fragment {
     private final List<String> groupTypeList = new ArrayList<>();
     private FloatingActionButton floatingActionButton;
     private Group removeGroup;
-    private   ExpandableListView expandableListView;
+    private ExpandableListView expandableListView;
     private ExpandableAdapter expandableAdapter;
+
     public GroupsFragment() {
 
     }
@@ -100,17 +101,14 @@ public class GroupsFragment extends Fragment {
     }
 
 
-
     private void removeClick(Group item) {
 
         RealmService.getInstance().beginTransaction();
 
         Group group = RealmService.getInstance().where(Group.class).equalTo("name", item.getName()).findFirst();
 
-
-
-        if(group != null){
-            System.out.println("REALM RESULT :   "   + group.getName());
+        if (group != null) {
+            System.out.println("REALM RESULT :   " + group.getName());
             group.deleteFromRealm();
         }
 
@@ -120,14 +118,12 @@ public class GroupsFragment extends Fragment {
 
     private List<String> getGroupTypeList() {
 
-
         if (groupTypeList.size() == 0) {
 
             for (GroupType s : GroupType.values()) {
                 groupTypeList.add(s.toString());
             }
         }
-
         return groupTypeList;
     }
 
@@ -143,7 +139,6 @@ public class GroupsFragment extends Fragment {
     private List<Group> realmResults(String groupType) {
 
         RealmResults<Group> query = RealmService.getInstance().where(Group.class).equalTo("groupType", groupType).findAllAsync();
-
 
         return new ArrayList<>(query);
     }

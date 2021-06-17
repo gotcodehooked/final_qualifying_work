@@ -20,8 +20,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.rseu.final_qualifying_work.DBOperationsImpl;
 import com.rseu.final_qualifying_work.R;
 import com.rseu.final_qualifying_work.RealmService;
 import com.rseu.final_qualifying_work.adapters.DisciplineAdapter;
@@ -40,14 +42,6 @@ import io.realm.Realm;
  */
 public class DisciplineFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     RecyclerView recyclerView;
     DisciplineAdapter disciplineAdapter;
@@ -55,35 +49,16 @@ public class DisciplineFragment extends Fragment {
     private FloatingActionButton floatingActionButton;
 
 
+    private DBOperationsImpl<Discipline> dbOperations ;
+
     public DisciplineFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DisciplineFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DisciplineFragment newInstance(String param1, String param2) {
-        DisciplineFragment fragment = new DisciplineFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -97,16 +72,19 @@ public class DisciplineFragment extends Fragment {
         assert activity != null;
         activity.setSupportActionBar(toolbar);
 
+        dbOperations = new DBOperationsImpl<>();
+
+
         floatingActionButton = view.findViewById(R.id.disciplineFloatingActionButton);
-
-
-
         recyclerView = view.findViewById(R.id.discipline_recyclerview);
         layoutManager = new LinearLayoutManager(requireContext().getApplicationContext());
-        disciplineAdapter = new DisciplineAdapter(RealmService.getInstance().where(Discipline.class).findAllAsync());
 
+
+
+        disciplineAdapter = new DisciplineAdapter(dbOperations.readData(RealmService.getInstance(),Discipline.class));
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(disciplineAdapter);
+
 
 
 
@@ -143,8 +121,6 @@ public class DisciplineFragment extends Fragment {
         });
         searchItem.setActionView(searchView);
 
-
-
     }
 
 
@@ -159,6 +135,7 @@ public class DisciplineFragment extends Fragment {
 
     }
 
+
     private void showAlertDialog() {
         View view_1;
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
@@ -168,7 +145,6 @@ public class DisciplineFragment extends Fragment {
 
         final EditText editText= view_1.findViewById(R.id.ed_alertFirstName);
 
-
         final AlertDialog alertDialog = builder.create();
 
         view_1.findViewById(R.id.btn_alertGroupDetail).setOnClickListener(new View.OnClickListener() {
@@ -177,12 +153,7 @@ public class DisciplineFragment extends Fragment {
 
                 Discipline discipline = new Discipline(editText.getText().toString());
 
-                RealmService.getInstance().executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(@NotNull Realm realm) {
-                        realm.insert(discipline);
-                    }
-                });
+                dbOperations.createData(RealmService.getInstance(),discipline);
 
                 alertDialog.dismiss();
             }
@@ -191,7 +162,6 @@ public class DisciplineFragment extends Fragment {
         Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawable((new ColorDrawable(Color.TRANSPARENT)));
         alertDialog.show();
     }
-
 
     @Override
     public void onDestroy() {

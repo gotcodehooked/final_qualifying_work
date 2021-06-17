@@ -2,10 +2,11 @@ package com.rseu.final_qualifying_work.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
+import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -18,6 +19,9 @@ import com.google.android.gms.tasks.Task;
 import com.rseu.final_qualifying_work.BuildConfig;
 import com.rseu.final_qualifying_work.R;
 import com.rseu.final_qualifying_work.RealmApp;
+
+
+import java.util.logging.LogRecord;
 
 import io.realm.Realm;
 import io.realm.mongodb.App;
@@ -40,6 +44,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        updateUI(account);
+
         setContentView(R.layout.activity_start);
 
 
@@ -157,14 +163,23 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
     private void updateUI(GoogleSignInAccount account) {
         if (account != null) {
-
-
-            Intent intent = new Intent(StartActivity.this, MainActivity.class);
-            // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Intent intent = new Intent(this, MainActivity.class);
+            //Handler handler = new Handler();
             startActivity(intent);
+            finish();
+
+//            final Runnable r = new Runnable() {
+//                public void run() {
+//
+//                   handler.postDelayed(this, 2000);
+//
+//                }
+//            };
 
         }
 
     }
+
+
 
 }

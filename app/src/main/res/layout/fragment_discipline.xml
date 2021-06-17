@@ -10,23 +10,6 @@
 
     <include layout="@layout/toolbar" />
 
-
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/tb_discipline_fragment"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:background="#D1DFEF"-->
-
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:title="Дисциплины"-->
-<!--        app:titleMarginStart="40dp"-->
-<!--        app:titleTextColor="@color/dark_blue"></androidx.appcompat.widget.Toolbar>-->
-=
-
-
-
     <androidx.core.widget.NestedScrollView
         android:id="@+id/disciplineScrollView"
         android:layout_width="match_parent"

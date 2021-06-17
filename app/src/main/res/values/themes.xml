@@ -28,16 +28,19 @@
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="TextAppearance.Widget.AppCompat.Toolbar.Title.">
-        <item name="android:textSize">10sp</item>
-    </style>
+
 
     <style name="HintTextSize" parent="TextAppearance.Design.Hint">
         <item name="android:textSize">14sp</item>
         <item name="android:paddingLeft">14sp</item>
     </style>
 
-<!--    <style name="Widget.AppCompat.EditText.">-->
-<!--        <item name="android:"-->
-<!--    </style>-->
+
+    <style name="ListView" parent="Widget.AppCompat.SearchView">
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:paddingEnd">0dp</item>
+        <item name="android:textColor">@color/dark_blue</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
 </resources>

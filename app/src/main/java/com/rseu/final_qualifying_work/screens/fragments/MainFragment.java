@@ -22,7 +22,9 @@ import com.google.android.material.navigation.NavigationView;
 import com.rseu.final_qualifying_work.GroupType;
 import com.rseu.final_qualifying_work.R;
 import com.rseu.final_qualifying_work.RealmApp;
+import com.rseu.final_qualifying_work.RealmService;
 import com.rseu.final_qualifying_work.model.Discipline;
+import com.rseu.final_qualifying_work.model.Group;
 import com.rseu.final_qualifying_work.screens.MainActivity;
 import com.rseu.final_qualifying_work.screens.StartActivity;
 
@@ -42,20 +44,21 @@ public class MainFragment extends Fragment {
 
     private TextView tvDateTime;
     private TextView tvName;
+    private TextView tvGroupCount;
+    private TextView tvLessonCount;
+    private TextView tvReportCount;
+
     private CardView cardViewGroups;
     private CardView cardViewLessons;
     private CardView cardViewDiscipline;
     private CardView cardViewReport;
     private TextView tvDisciplineCount;
     private GoogleSignInAccount account;
-    private User user;
-    private Realm realm;
+
 
     @Override
     public void onStart() {
         super.onStart();
-        user = RealmApp.app.currentUser();
-
 
     }
 
@@ -68,29 +71,26 @@ public class MainFragment extends Fragment {
         account = GoogleSignIn.getLastSignedInAccount(requireContext());
 
         tvDisciplineCount = view.findViewById(R.id.tvMainFragmentDisciplineCount);
+        tvGroupCount = view.findViewById(R.id.tvMainFragmentGroupCount);
+        tvLessonCount = view.findViewById(R.id.tvMainFragmentLessonCount);
+        tvReportCount = view.findViewById(R.id.tvMainFragmentReportCount);
+
         tvName = view.findViewById(R.id.tv_main_name);
         tvName.setText(account.getDisplayName());
 
-        String realmName = "e-journal";
-
-        RealmConfiguration config = new RealmConfiguration.Builder()
-                .name(realmName)
-                .build();
 
 
-        realm = Realm.getInstance(config);
+        tvGroupCount.setText(String.valueOf(RealmService.getInstance().where(Group.class).count()));
+        tvDisciplineCount.setText(String.valueOf(RealmService.getInstance().where(Discipline.class).count()));
 
-        tvDisciplineCount.setText(String.valueOf(realm.where(Discipline.class).count()));
+
 
         dateInit(view);
         cardInit(view);
         onClick();
 
 
-
-
-
-        System.out.println("ALL USERS" +    RealmApp.app.currentUser());
+        System.out.println("ALL USERS" + RealmApp.app.currentUser());
         return view;
     }
 
@@ -111,12 +111,12 @@ public class MainFragment extends Fragment {
 
 
     public void onClick() {
-            cardViewGroups.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Navigation.findNavController(v).navigate(R.id.action_mainFragment_to_groupsFragment);
-                }
-            });
+        cardViewGroups.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_mainFragment_to_groupsFragment);
+            }
+        });
 
         cardViewLessons.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,5 +136,7 @@ public class MainFragment extends Fragment {
                 Navigation.findNavController(v).navigate(R.id.action_mainFragment_to_reportFragment);
             }
         });
-  }
+    }
+
+
 }
