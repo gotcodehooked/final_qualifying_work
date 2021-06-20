@@ -129,7 +129,6 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,"REMOVE GROUP " + groupRemove.getName() + "   "+ groupPosition+"   "+ Integer.toString(childPosition), Toast.LENGTH_LONG).show();
                  Objects.requireNonNull(collection.get(groupList.get(groupPosition))).remove(groupRemove);
                  mOnItemClickListener.onItemClick(groupRemove);
             }

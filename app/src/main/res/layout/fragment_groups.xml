@@ -8,8 +8,8 @@
     android:background="#e9f0fc"
     tools:context=".screens.fragments.GroupsFragment">
 
-<!--    <include-->
-<!--        layout="@layout/toolbar" />-->
+    <include
+        layout="@layout/group_fragment_toolbar" />
 
     <ExpandableListView
         android:id="@+id/elv_groupFragment"
@@ -17,7 +17,6 @@
         android:layout_height="match_parent"
         android:layout_marginTop="54dp"
         android:dividerHeight="1dp">
-
     </ExpandableListView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -31,8 +30,5 @@
         app:elevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

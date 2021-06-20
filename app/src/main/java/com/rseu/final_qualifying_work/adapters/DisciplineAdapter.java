@@ -81,7 +81,7 @@ public class DisciplineAdapter extends RealmRecyclerViewAdapter<Discipline, Disc
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
 
-            mView = itemView.findViewById(R.id.group_row_item);
+            mView = itemView.findViewById(R.id.discipline_row_item);
             tvDisciplineName = itemView.findViewById(R.id.tvDisciplineNameRowItem);
             imageButton = itemView.findViewById(R.id.ib_deleteDisciplineRowItem);
 

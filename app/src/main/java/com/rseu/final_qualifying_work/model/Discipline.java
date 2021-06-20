@@ -12,7 +12,6 @@ import io.realm.annotations.PrimaryKey;
 
 public class Discipline extends RealmObject {
 
-
     @PrimaryKey
     private ObjectId _id = new ObjectId();
     private String disciplineName;

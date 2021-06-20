@@ -25,6 +25,7 @@ import com.rseu.final_qualifying_work.RealmApp;
 import com.rseu.final_qualifying_work.RealmService;
 import com.rseu.final_qualifying_work.model.Discipline;
 import com.rseu.final_qualifying_work.model.Group;
+import com.rseu.final_qualifying_work.model.Lesson;
 import com.rseu.final_qualifying_work.screens.MainActivity;
 import com.rseu.final_qualifying_work.screens.StartActivity;
 
@@ -82,7 +83,7 @@ public class MainFragment extends Fragment {
 
         tvGroupCount.setText(String.valueOf(RealmService.getInstance().where(Group.class).count()));
         tvDisciplineCount.setText(String.valueOf(RealmService.getInstance().where(Discipline.class).count()));
-
+        tvLessonCount.setText(String.valueOf(RealmService.getInstance().where(Lesson.class).count()));
 
 
         dateInit(view);

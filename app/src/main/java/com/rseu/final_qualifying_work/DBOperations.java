@@ -12,9 +12,9 @@ public interface DBOperations<T extends RealmObject> {
 
     public  void createData (Realm realm, T object);
 
-    public  void deleteData(Realm realm, T object, String fieldName, String fieldValue);
+    public  void deleteData(Realm realm, Class<T> tClass, String fieldName, String fieldValue);
 
-    public  void updateData(Realm realm, T object);
+    public  void updateData(Realm realm, Class<T> tClass , String fieldName,String fieldValue, T saveObject);
 
     public  RealmResults<T>  readData(Realm realm, Class<T> tClass) ;
 

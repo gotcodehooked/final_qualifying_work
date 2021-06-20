@@ -1,15 +1,17 @@
 package com.rseu.final_qualifying_work.screens.fragments;
 
+import android.app.AlertDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,18 +21,26 @@ import androidx.navigation.Navigation;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.rseu.final_qualifying_work.DBOGroupImpl;
+import com.rseu.final_qualifying_work.DBOperations;
+import com.rseu.final_qualifying_work.DBOperationsImpl;
 import com.rseu.final_qualifying_work.GroupType;
 import com.rseu.final_qualifying_work.R;
 
 import com.rseu.final_qualifying_work.RealmService;
 import com.rseu.final_qualifying_work.adapters.ExpandableAdapter;
+import com.rseu.final_qualifying_work.model.Discipline;
 import com.rseu.final_qualifying_work.model.Group;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 public class GroupsFragment extends Fragment {
@@ -41,6 +51,9 @@ public class GroupsFragment extends Fragment {
     private Group removeGroup;
     private ExpandableListView expandableListView;
     private ExpandableAdapter expandableAdapter;
+    DBOperations<Group> groupDBOperations;
+
+    private RealmChangeListener realmListener;
 
     public GroupsFragment() {
 
@@ -54,13 +67,11 @@ public class GroupsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_groups, container, false);
 
-//        Toolbar toolbar = view.findViewById(R.id.discipline_toolbar);
-//        setHasOptionsMenu(true);
-//        AppCompatActivity activity = (AppCompatActivity) getActivity();
-//        assert activity != null;
-//        activity.setSupportActionBar(toolbar);
-
         floatingActionButton = view.findViewById(R.id.groupFloatingActionButton);
+        expandableListView = view.findViewById(R.id.elv_groupFragment);
+        expandableAdapter = new ExpandableAdapter(requireContext(), getGroupTypeList(), getResultsHashMap());
+        expandableListView.setAdapter(expandableAdapter);
+        groupDBOperations = new DBOGroupImpl();
 
         expandableListView = view.findViewById(R.id.elv_groupFragment);
         expandableAdapter = new ExpandableAdapter(requireContext(), getGroupTypeList(), getResultsHashMap());
@@ -76,7 +87,6 @@ public class GroupsFragment extends Fragment {
                 Gson gson = builder.create();
                 String groupJson = gson.toJson(group1);
 
-                Toast.makeText(requireContext(), groupJson, Toast.LENGTH_SHORT).show();
                 GroupsFragmentDirections.ActionGroupsFragmentToGroupDetailFragment action =
                         GroupsFragmentDirections.actionGroupsFragmentToGroupDetailFragment();
                 action.setGroupJson(groupJson);
@@ -89,11 +99,10 @@ public class GroupsFragment extends Fragment {
         expandableAdapter.deleteData(new ExpandableAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Group item) {
-                removeClick(item);
-                expandableAdapter.notifyDataSetChanged();
+                showAlertDialog(groupDBOperations, item);
+
             }
         });
-
 
         fabClick();
 
@@ -101,19 +110,37 @@ public class GroupsFragment extends Fragment {
     }
 
 
-    private void removeClick(Group item) {
+    private void showAlertDialog(DBOperations<Group> dbOperations, Group item) {
+        View view_1;
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        view_1 = LayoutInflater.from(requireContext()).inflate(R.layout.group_remove_alert_dialog, null);
 
-        RealmService.getInstance().beginTransaction();
+        builder.setView(view_1);
 
-        Group group = RealmService.getInstance().where(Group.class).equalTo("name", item.getName()).findFirst();
+        final AlertDialog alertDialog = builder.create();
 
-        if (group != null) {
-            System.out.println("REALM RESULT :   " + group.getName());
-            group.deleteFromRealm();
-        }
+        Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawable((new ColorDrawable(Color.TRANSPARENT)));
+        alertDialog.show();
+
+        TextView tvGroupName = view_1.findViewById(R.id.tv_alertDialogGroupName);
+        tvGroupName.setText(item.getName());
 
 
-        RealmService.getInstance().commitTransaction();
+        view_1.findViewById(R.id.btn_GroupRemoveAccept).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dbOperations.deleteData(RealmService.getInstance(), Group.class, "name", item.getName());
+                expandableAdapter.notifyDataSetChanged();
+                alertDialog.dismiss();
+            }
+        });
+
+        view_1.findViewById(R.id.btn_groupRemoveCancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
     }
 
     private List<String> getGroupTypeList() {
@@ -154,11 +181,6 @@ public class GroupsFragment extends Fragment {
 
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.group_action_bar, menu);
-        MenuItem searchItem = menu.findItem(R.id.action_sort_cases);
 
-    }
 }
 

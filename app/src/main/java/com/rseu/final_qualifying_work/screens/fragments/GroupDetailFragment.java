@@ -19,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -32,6 +31,8 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.rseu.final_qualifying_work.DBOGroupImpl;
+import com.rseu.final_qualifying_work.DBOperationsImpl;
 import com.rseu.final_qualifying_work.GroupType;
 import com.rseu.final_qualifying_work.R;
 import com.rseu.final_qualifying_work.RealmService;
@@ -47,7 +48,6 @@ import java.util.Objects;
 
 import io.realm.Realm;
 import io.realm.RealmList;
-import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 
@@ -65,8 +65,9 @@ public class GroupDetailFragment extends Fragment {
     private View view;
     private Group group;
     private boolean displayMode =  false;
-
-
+    private boolean isEditMode = false;
+    private DBOGroupImpl groupDBOperations;
+    private Toolbar toolbar;
     public GroupDetailFragment() {
         // Required empty public constructor
     }
@@ -103,6 +104,11 @@ public class GroupDetailFragment extends Fragment {
                 } else {
                     System.out.println(displayMode);
                 }
+
+                editTextGroupName.setEnabled(false);
+                floatingActionButton.setEnabled(false);
+                spinner.setEnabled(false);
+                studentRecyclerView.setEnabled(false);
             }
         }
     }
@@ -112,14 +118,18 @@ public class GroupDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_group_detail, container, false);
-        Toolbar toolbar = view.findViewById(R.id.groupDetail_toolbar);
+
+         toolbar = view.findViewById(R.id.groupDetail_toolbar);
         setHasOptionsMenu(true);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         assert activity != null;
         activity.setSupportActionBar(toolbar);
 
+
         viewInit(view);
         fabClick();
+        RealmService.getInstance().refresh();
+        groupDBOperations = new DBOGroupImpl();
 
         return view;
     }
@@ -154,7 +164,7 @@ public class GroupDetailFragment extends Fragment {
         floatingActionButton = view.findViewById(R.id.fb_groupDetail);
         studentRecyclerView = view.findViewById(R.id.rv_groupDetail);
         layoutManager = new LinearLayoutManager(requireContext().getApplicationContext());
-        groupDetailAdapter = new GroupDetailAdapter(studentList);
+        groupDetailAdapter = new GroupDetailAdapter(studentList,true);
         studentRecyclerView.setLayoutManager(layoutManager);
         studentRecyclerView.setAdapter(groupDetailAdapter);
 
@@ -183,9 +193,29 @@ public class GroupDetailFragment extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.groupsFragment);
             }
         } else {
+            toolbar.setTitle("Редактирование группы");
              if(item.getItemId() == R.id.groupSaveMenu){
                  item.setIcon(R.drawable.ic_baseline_check_24);
-                 editAGroup(groupName(),groupType,studentList);
+
+
+                     editTextGroupName.setEnabled(true);
+                     spinner.setEnabled(true);
+                     floatingActionButton.setEnabled(true);
+
+
+
+                    item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            editAGroup(groupName(),groupType,studentList);
+                            Navigation.findNavController(view).navigate(R.id.groupsFragment);
+
+                            return true;
+                        }
+                    });
+
+
+
              }
         }
         return true;
@@ -198,7 +228,7 @@ public class GroupDetailFragment extends Fragment {
         if (editTextGroupName.getText().toString().length() == 0) {
             System.out.println("Lenght = 0");
         } else {
-            groupName = editTextGroupName.getText().toString();
+            groupName = editTextGroupName.getText().toString().trim();
 
             return groupName;
         }
@@ -206,12 +236,14 @@ public class GroupDetailFragment extends Fragment {
         return groupName;
     }
 
+
     private void fabClick() {
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showAlertDialog();
+
             }
         });
 
@@ -239,7 +271,7 @@ public class GroupDetailFragment extends Fragment {
 
         final AlertDialog alertDialog = builder.create();
 
-        view_1.findViewById(R.id.btn_alertGroupDetail).setOnClickListener(new View.OnClickListener() {
+        view_1.findViewById(R.id.btn_GroupRemoveAccept).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -289,7 +321,6 @@ public class GroupDetailFragment extends Fragment {
 
         }
 
-
         if (!isGroupExist) {
             if ((groupSave.getName() != null) && (groupSave.getStudentsList().size()) != 0) {
                 RealmService.getInstance().executeTransactionAsync(new Realm.Transaction() {
@@ -308,7 +339,24 @@ public class GroupDetailFragment extends Fragment {
 
     private void editAGroup(String groupName,String groupType, List<Student> students){
 
+        Group groupSave = new Group();
 
+        RealmList<Student> realmList = new RealmList<>();
 
+        //boolean isGroupExist = false;
+        groupSave.setName(editTextGroupName.getText().toString());
+        groupSave.setGroupType(groupType);
+        realmList.addAll(students);
+        groupSave.setStudentsList(realmList);
+
+        Toast.makeText(requireContext(),"HYETA", Toast.LENGTH_SHORT).show();
+        groupDBOperations.updateData(RealmService.getInstance(),Group.class,"name",group.getName(),groupSave);
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RealmService.getInstance().close();
     }
 }

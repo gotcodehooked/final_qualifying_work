@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +40,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private GoogleSignInAccount account;
     private int RC_SIGN_IN = 9002;
 
+    private ProgressBar progressBar;
+
     App app;
 
     @Override
@@ -48,6 +51,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
         setContentView(R.layout.activity_start);
 
+        progressBar = findViewById(R.id.progressBar);
 
         signInButton = findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_WIDE);
@@ -133,15 +137,15 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             String authorizationCode = account != null ? account.getIdToken() : null;
 
             Credentials googleCredentials = Credentials.google(authorizationCode, GoogleAuthType.ID_TOKEN);
-
+            progressBar.setVisibility(View.VISIBLE);
             app.loginAsync(googleCredentials, result -> {
                 if (result.isSuccess()) {
 
 
-                    System.out.println("USSSSSSSSSSSSSSSSSER" + result.get().getProfile().getFirstName());
+                  ;
                     updateUI(account);
-                    Toast.makeText(this,"TOASTER_AAA",Toast.LENGTH_SHORT).show();
 
+                    progressBar.setVisibility(View.GONE);
                     Log.v("AUTH", "Successfully logged in to MongoDB Realm using Google OAuth.");
                 }
                 else {
@@ -163,6 +167,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
     private void updateUI(GoogleSignInAccount account) {
         if (account != null) {
+
             Intent intent = new Intent(this, MainActivity.class);
             //Handler handler = new Handler();
             startActivity(intent);

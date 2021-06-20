@@ -25,10 +25,11 @@ import io.realm.RealmRecyclerViewAdapter;
 public class GroupDetailAdapter extends RecyclerView.Adapter<GroupDetailAdapter.ViewHolder> {
 
     private List<Student> data;
-
-    public GroupDetailAdapter(List<Student> data) {
+    private boolean isEditMode;
+    public GroupDetailAdapter(List<Student> data,boolean isEditMode) {
 
         this.data = data;
+        this.isEditMode = isEditMode;
     }
 
     @NonNull
@@ -50,13 +51,17 @@ public class GroupDetailAdapter extends RecyclerView.Adapter<GroupDetailAdapter.
         holder.tvStudentSecondName.setText(obj.getSecondName());
         holder.data = obj;
 
+
+        if (isEditMode) {
+
+
         holder.ibStudentRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 deleteStudent(position);
             }
         });
-
+    }
 
     }
 
@@ -69,6 +74,11 @@ public class GroupDetailAdapter extends RecyclerView.Adapter<GroupDetailAdapter.
 
     }
 
+    public void isEditMode (boolean isEditMode ){
+
+        this.isEditMode = isEditMode;
+
+    }
 
     @Override
     public int getItemCount() {

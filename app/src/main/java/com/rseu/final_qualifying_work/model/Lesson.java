@@ -3,6 +3,7 @@ package com.rseu.final_qualifying_work.model;
 import org.bson.types.ObjectId;
 
 import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
 
 public class Lesson extends RealmObject {
@@ -10,18 +11,20 @@ public class Lesson extends RealmObject {
     @PrimaryKey
     private ObjectId objectId = new ObjectId();
     private String lessonName;
+
     private Group group;
-    private Discipline discipline;
+    private String disciplineName;
     private String dateTime;
+    private int numberLesson;
+
+
+
+    private String destination;
+
+    @Ignore
+    private boolean isExpanded = true;
 
     public Lesson(){
-
-    }
-    public Lesson(String lessonName, Group group,Discipline discipline){
-        this.lessonName = lessonName;
-        this.group = group;
-        this.discipline = discipline;
-
     }
 
     public ObjectId getObjectId() {
@@ -40,12 +43,12 @@ public class Lesson extends RealmObject {
         this.group = group;
     }
 
-    public Discipline getDiscipline() {
-        return discipline;
+    public String getDisciplineName() {
+        return disciplineName;
     }
 
-    public void setDiscipline(Discipline discipline) {
-        this.discipline = discipline;
+    public void setDisciplineName(String disciplineName) {
+        this.disciplineName = disciplineName;
     }
 
     public String getDateTime() {
@@ -62,6 +65,30 @@ public class Lesson extends RealmObject {
 
     public void setLessonName(String lessonName) {
         this.lessonName = lessonName;
+    }
+
+    public int getNumberLesson() {
+        return numberLesson;
+    }
+
+    public void setNumberLesson(int numberLesson) {
+        this.numberLesson = numberLesson;
+    }
+
+    public boolean isExpanded() {
+        return isExpanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        isExpanded = expanded;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
     }
 
     @Override
