@@ -47,7 +47,6 @@ public class DBOGroupImpl implements DBOperations<Group> {
                 .equalTo(fieldName, fieldValue)
                 .findFirst();
 
-
         if (group != null) {
 
             saveObject.getStudentsList().sort(fieldName);
@@ -67,15 +66,15 @@ public class DBOGroupImpl implements DBOperations<Group> {
             group.setName(saveObject.getName());
             group.setGroupType(saveObject.getGroupType());
             realm.copyToRealmOrUpdate(group);
-
             realm.commitTransaction();
         }
-
-
     }
 
     @Override
     public RealmResults<Group> readData(Realm realm, Class<Group> groupClass) {
-        return null;
+        realm.beginTransaction();
+        RealmResults<? extends RealmObject> realmResults = realm.where(groupClass).findAll();
+        realm.commitTransaction();
+        return (RealmResults<Group>) realmResults;
     }
 }

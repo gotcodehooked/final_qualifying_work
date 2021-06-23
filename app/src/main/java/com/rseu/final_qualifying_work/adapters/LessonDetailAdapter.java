@@ -18,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 
-
 public class LessonDetailAdapter extends RecyclerView.Adapter<LessonDetailAdapter.ViewHolder> {
 
     private List<Student> data;
@@ -46,14 +45,9 @@ public class LessonDetailAdapter extends RecyclerView.Adapter<LessonDetailAdapte
         holder.tvStudentFirstName.setText(obj.getFirstName());
         holder.tvStudentSecondName.setText(obj.getSecondName());
         holder.edGroupMark.setText(holder.edGroupMark.getText());
-
         holder.data = obj;
 
-
-
     }
-
-
 
 
     @Override

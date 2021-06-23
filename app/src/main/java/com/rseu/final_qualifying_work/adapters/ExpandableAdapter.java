@@ -30,12 +30,9 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
     public ExpandableAdapter(Context context, List<String> groupList, HashMap<String, List<Group>> collection) {
 
-
         this.context = context;
         this.collection = collection;
         this.groupList = groupList;
-
-
     }
 
     @Override
@@ -102,40 +99,36 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
     }
 
 
-
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View childView, ViewGroup parent) {
-       String group = getChild(groupPosition,childPosition).getName();
-       String studentsCount = Integer.toString(getChild(groupPosition,childPosition).getStudentsList().size());
+        String group = getChild(groupPosition, childPosition).getName();
+        String studentsCount = Integer.toString(getChild(groupPosition, childPosition).getStudentsList().size());
 
-       if(childView == null){
-           LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-           childView = inflater.inflate(R.layout.row_group_item, null);
+        if (childView == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            childView = inflater.inflate(R.layout.row_group_item, null);
 
-       }
+        }
 
-       TextView groupName = childView.findViewById(R.id.tv_studentFirstName);
-       groupName.setText(group);
+        TextView groupName = childView.findViewById(R.id.tv_studentFirstName);
+        groupName.setText(group);
 
-       TextView groupCount = childView.findViewById(R.id.tv_StudentSecondName);
+        TextView groupCount = childView.findViewById(R.id.tv_StudentSecondName);
         groupCount.setText(studentsCount);
 
 
         ImageButton imageButton = childView.findViewById(R.id.ib_group_remove);
 
 
-       Group groupRemove = getChild(groupPosition,childPosition);
+        Group groupRemove = getChild(groupPosition, childPosition);
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 Objects.requireNonNull(collection.get(groupList.get(groupPosition))).remove(groupRemove);
-                 mOnItemClickListener.onItemClick(groupRemove);
+                Objects.requireNonNull(collection.get(groupList.get(groupPosition))).remove(groupRemove);
+                mOnItemClickListener.onItemClick(groupRemove);
             }
         });
-
-
-
 
 
 //        imageButton.setOnClickListener(new View.OnClickListener() {
@@ -155,7 +148,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
     }
 
 
-    public void deleteData(OnItemClickListener onItemClickListener){
+    public void deleteData(OnItemClickListener onItemClickListener) {
         this.mOnItemClickListener = onItemClickListener;
     }
 

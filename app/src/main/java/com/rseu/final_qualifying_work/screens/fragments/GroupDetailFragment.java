@@ -64,10 +64,11 @@ public class GroupDetailFragment extends Fragment {
     private String groupType;
     private View view;
     private Group group;
-    private boolean displayMode =  false;
+    private boolean displayMode = false;
     private boolean isEditMode = false;
     private DBOGroupImpl groupDBOperations;
     private Toolbar toolbar;
+
     public GroupDetailFragment() {
         // Required empty public constructor
     }
@@ -119,7 +120,7 @@ public class GroupDetailFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_group_detail, container, false);
 
-         toolbar = view.findViewById(R.id.groupDetail_toolbar);
+        toolbar = view.findViewById(R.id.groupDetail_toolbar);
         setHasOptionsMenu(true);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         assert activity != null;
@@ -164,7 +165,7 @@ public class GroupDetailFragment extends Fragment {
         floatingActionButton = view.findViewById(R.id.fb_groupDetail);
         studentRecyclerView = view.findViewById(R.id.rv_groupDetail);
         layoutManager = new LinearLayoutManager(requireContext().getApplicationContext());
-        groupDetailAdapter = new GroupDetailAdapter(studentList,true);
+        groupDetailAdapter = new GroupDetailAdapter(studentList, true);
         studentRecyclerView.setLayoutManager(layoutManager);
         studentRecyclerView.setAdapter(groupDetailAdapter);
 
@@ -194,29 +195,27 @@ public class GroupDetailFragment extends Fragment {
             }
         } else {
             toolbar.setTitle("Редактирование группы");
-             if(item.getItemId() == R.id.groupSaveMenu){
-                 item.setIcon(R.drawable.ic_baseline_check_24);
+            if (item.getItemId() == R.id.groupSaveMenu) {
+                item.setIcon(R.drawable.ic_baseline_check_24);
 
 
-                     editTextGroupName.setEnabled(true);
-                     spinner.setEnabled(true);
-                     floatingActionButton.setEnabled(true);
+                editTextGroupName.setEnabled(true);
+                spinner.setEnabled(true);
+                floatingActionButton.setEnabled(true);
 
 
+                item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        editAGroup(groupName(), groupType, studentList);
+                        Navigation.findNavController(view).navigate(R.id.groupsFragment);
 
-                    item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            editAGroup(groupName(),groupType,studentList);
-                            Navigation.findNavController(view).navigate(R.id.groupsFragment);
-
-                            return true;
-                        }
-                    });
-
+                        return true;
+                    }
+                });
 
 
-             }
+            }
         }
         return true;
     }
@@ -310,15 +309,11 @@ public class GroupDetailFragment extends Fragment {
 
         RealmResults<Group> realmResults = RealmService.getInstance().where(Group.class).findAllAsync();
 
-        System.out.println("ГРУППА  " + groupSave.getName() + "--" + groupSave.getGroupType());
-
         for (Group g : realmResults) {
 
             if (g.getName().equals(groupSave.getName())) {
                 isGroupExist = true;
-
             }
-
         }
 
         if (!isGroupExist) {
@@ -332,12 +327,12 @@ public class GroupDetailFragment extends Fragment {
             } else {
                 Toast.makeText(requireContext(), "Некоторые данные отсутствуют", Toast.LENGTH_LONG).show();
             }
-        }else {
+        } else {
             Toast.makeText(requireContext(), " Такая группа уже существует", Toast.LENGTH_LONG).show();
         }
     }
 
-    private void editAGroup(String groupName,String groupType, List<Student> students){
+    private void editAGroup(String groupName, String groupType, List<Student> students) {
 
         Group groupSave = new Group();
 
@@ -349,8 +344,8 @@ public class GroupDetailFragment extends Fragment {
         realmList.addAll(students);
         groupSave.setStudentsList(realmList);
 
-        Toast.makeText(requireContext(),"HYETA", Toast.LENGTH_SHORT).show();
-        groupDBOperations.updateData(RealmService.getInstance(),Group.class,"name",group.getName(),groupSave);
+        Toast.makeText(requireContext(), "HYETA", Toast.LENGTH_SHORT).show();
+        groupDBOperations.updateData(RealmService.getInstance(), Group.class, "name", group.getName(), groupSave);
 
     }
 

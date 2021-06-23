@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.os.Handler;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -61,37 +62,36 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         String appID = "fqw-mgjuw";
 
 
-
         app = new App(new AppConfiguration.Builder(appID)
                 .defaultSyncErrorHandler((session, error) -> Log.e(TAG(), "Sync error: ${error.errorMessage}"))
                 .build());
 
 
+        findViewById(R.id.sign_in_button).
 
-    findViewById(R.id.sign_in_button).
+                setOnClickListener(this);
 
-    setOnClickListener(this);
+        GoogleSignInOptions gso = new GoogleSignInOptions
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestIdToken(getString(R.string.client_id))
+                //.requestServerAuthCode(getString(R.string.client_id))
+                .build();
 
-    GoogleSignInOptions gso = new GoogleSignInOptions
-            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .requestIdToken(getString(R.string.client_id))
-            //.requestServerAuthCode(getString(R.string.client_id))
-            .build();
-
-    mGoogleSignInClient =GoogleSignIn.getClient(this,gso);
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
 
     private String TAG() {
         return "TAG";
     }
+
     @Override
     public void onStart() {
         super.onStart();
 
         account = GoogleSignIn.getLastSignedInAccount(this);
-         //Signed in successfully, show authenticated UI.
+        //Signed in successfully, show authenticated UI.
 
         updateUI(account);
     }
@@ -121,7 +121,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
-            Toast.makeText(this,"RESULT",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "RESULT", Toast.LENGTH_SHORT).show();
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -141,50 +141,30 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             app.loginAsync(googleCredentials, result -> {
                 if (result.isSuccess()) {
 
-
-                  ;
                     updateUI(account);
-
                     progressBar.setVisibility(View.GONE);
                     Log.v("AUTH", "Successfully logged in to MongoDB Realm using Google OAuth.");
-                }
-                else {
+                } else {
                     updateUI(null);
 
-
-                    Toast.makeText(this,"TOASTER",Toast.LENGTH_SHORT).show();
                     Log.e("AUTH", "Failed to log in to MongoDB Realm", result.getError());
                 }
             });
 
         } catch (ApiException apiException) {
             apiException.printStackTrace();
-            //updateUI(account);
         }
-
-
     }
 
     private void updateUI(GoogleSignInAccount account) {
         if (account != null) {
-
             Intent intent = new Intent(this, MainActivity.class);
-            //Handler handler = new Handler();
             startActivity(intent);
             finish();
-
-//            final Runnable r = new Runnable() {
-//                public void run() {
-//
-//                   handler.postDelayed(this, 2000);
-//
-//                }
-//            };
 
         }
 
     }
-
 
 
 }
